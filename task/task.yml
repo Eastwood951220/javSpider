@@ -1,55 +1,55 @@
 tasks:
-  - name: "三喜本のぞみ"
-    url: "https://javdb.com/actors/1k3v"
-    url_type: "actor"
-    is_skip: true
-    filter:
-      only_chinese: false
-      exclude_multi_person: false
-
-  - name: "藤沢麗央"
-    url: "https://javdb.com/actors/O2X20"
-    url_type: "actor"
-    is_skip: true
-    filter:
-      only_chinese: false
-      exclude_multi_person: false
-
-  - name: "丸石レア"
-    url: "https://javdb.com/actors/VwkWq"
-    url_type: "actor"
-    is_skip: true
-    filter:
-      only_chinese: false
-      exclude_multi_person: false
-
-  - name: "田野憂"
-    url: "https://javdb.com/actors/8VOMx"
-    url_type: "actor"
-    is_skip: true
-    filter:
-      only_chinese: false
-      exclude_multi_person: false
-
-  - name: "RCTD"
-    url: "https://javdb.com/video_codes/RCTD"
-    url_type: "code"
-    is_skip: true
-    filter:
-      only_chinese: false
-
-  - name: "武田怜香"
-    url: "https://javdb.com/actors/qD43N"
-    url_type: "actor"
-    is_skip: true
-    filter:
-      only_chinese: false
-      exclude_multi_person: false
-#
-#  - name: "Madonna"
-#    url: "https://www.javbus.com/label/7l"
-#    url_type: "company"
+#  - name: "三喜本のぞみ"
+#    url: "https://javdb.com/actors/1k3v"
+#    url_type: "actor"
 #    is_skip: true
 #    filter:
 #      only_chinese: false
 #      exclude_multi_person: false
+#
+#  - name: "藤沢麗央"
+#    url: "https://javdb.com/actors/O2X20"
+#    url_type: "actor"
+#    is_skip: true
+#    filter:
+#      only_chinese: false
+#      exclude_multi_person: false
+#
+#  - name: "丸石レア"
+#    url: "https://javdb.com/actors/VwkWq"
+#    url_type: "actor"
+#    is_skip: true
+#    filter:
+#      only_chinese: false
+#      exclude_multi_person: false
+#
+#  - name: "田野憂"
+#    url: "https://javdb.com/actors/8VOMx"
+#    url_type: "actor"
+#    is_skip: true
+#    filter:
+#      only_chinese: false
+#      exclude_multi_person: false
+#
+#  - name: "RCTD"
+#    url: "https://javdb.com/video_codes/RCTD"
+#    url_type: "code"
+#    is_skip: true
+#    filter:
+#      only_chinese: false
+#
+#  - name: "武田怜香"
+#    url: "https://javdb.com/actors/qD43N"
+#    url_type: "actor"
+#    is_skip: true
+#    filter:
+#      only_chinese: false
+#      exclude_multi_person: false
+
+  - name: "Madonna"
+    url: "https://www.javbus.com/label/7l"
+    url_type: "company"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false

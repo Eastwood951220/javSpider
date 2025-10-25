@@ -64,11 +64,15 @@ def _should_skip_item(filters, detail_data: Dict) -> bool:
 
 
 def _calculate_magnet_weight(magnet_data: Dict) -> float:
-    """计算磁力链接的权重"""
-    base_weight = magnet_data["size"]
+    base_weight = magnet_data.get("size", 0)
 
-    # 中文优先加权
-    priority_boost = 10000 if any("字幕" in t for t in magnet_data["tags"]) else 0
+    tags = magnet_data.get("tags", [])
+    has_chinese = any("字幕" in t for t in tags)
+
+    # 字幕优先 + 高清优先
+    priority_boost = 0
+    if has_chinese:
+        priority_boost += 10000
 
     return base_weight + priority_boost
 
@@ -78,12 +82,26 @@ def _prefilter_magnets(magnets, only_chinese: bool) -> List:
     if not only_chinese:
         return magnets
 
-    chinese_magnets = [m for m in magnets if m.css(".tags .is-warning")]
+    chinese_magnets = []
+
+    for m in magnets:
+        # --- 情况A：Scrapy Selector 对象 ---
+        if hasattr(m, "css"):
+            tag_texts = m.css(".tags .is-warning::text").getall()
+            if any("中字" in t or "字幕" in t for t in tag_texts):
+                chinese_magnets.append(m)
+
+        # --- 情况B：已解析的 dict 数据 ---
+        elif isinstance(m, dict):
+            tags = m.get("tags", [])
+            if any("中字" in t or "字幕" in t for t in tags):
+                chinese_magnets.append(m)
+
     return chinese_magnets if chinese_magnets else magnets
 
 
 def _parse_size(text: str) -> float:
-    """将大小文本转为 MB 数字"""
+    """解析大小文本为 MB"""
     if not text:
         return 0.0
 
@@ -91,6 +109,41 @@ def _parse_size(text: str) -> float:
     if not match:
         return 0.0
 
-    size = float(match[1])
-    unit = match[2].upper()
+    size = float(match.group(1))
+    unit = match.group(2).upper()
     return size * 1024 if unit == "GB" else size
+
+
+def _parse_actors(response) -> List[str]:
+    """多层策略解析演员信息"""
+    selectors = [
+        ".star-box a[title]::attr(title)",
+        "p a[href*='/star/']::text",
+        ".star-name a::text"
+    ]
+
+    actors: List[str] = []
+    for sel in selectors:
+        names = response.css(sel).getall()
+        if names:
+            actors.extend([n.strip() for n in names if n.strip()])
+
+    # 去重 + 保留顺序
+    return list(dict.fromkeys(actors))
+
+
+def _safe_extract_first(selector, default: str = "") -> str:
+    """安全提取单值"""
+    try:
+        value = selector.get()
+        return value.strip() if value else default
+    except Exception:
+        return default
+
+
+def _safe_join_texts(selector) -> str:
+    """拼接多段文本"""
+    try:
+        return " ".join(selector.css("::text").getall()).strip()
+    except Exception:
+        return ""
