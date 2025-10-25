@@ -65,6 +65,12 @@ class JavbusSpider(scrapy.Spider):
         self.max_duplicates = 3
         self.stop_current_actor = False
 
+        self.total_count = 0  # 总尝试影片数
+        self.success_count = 0  # 成功影片数
+        self.fail_count = 0  # 失败影片数
+        self.failed_items = []
+        self.chinese_count = 0  # 含中文字幕磁力的影片数
+
     def _init_components(self):
         """初始化日志、数据库等组件"""
         # 初始化日志系统
@@ -138,14 +144,14 @@ class JavbusSpider(scrapy.Spider):
             yield from self.process_list_item(item, response)
 
         # 处理下一页
-        # next_url = response.css("a#next::attr(href)").get()
-        # if next_url and not self.stop_current_actor:
-        #     yield response.follow(
-        #         next_url,
-        #         callback=self.parse_list,
-        #         errback=self.handle_error,
-        #         priority=-10
-        #     )
+        next_url = response.css("a#next::attr(href)").get()
+        if next_url and not self.stop_current_actor:
+            yield response.follow(
+                next_url,
+                callback=self.parse_list,
+                errback=self.handle_error,
+                priority=-10
+            )
 
     def process_list_item(self, item, response):
         title = item.css("img::attr(title)").get() or ""
@@ -199,37 +205,50 @@ class JavbusSpider(scrapy.Spider):
         name = response.meta["name"]
         title = response.meta["title"]
         code = response.meta["code"]
+        url = response.url
+        self.total_count += 1  # 🎬 总计+1
 
         self.logger.info(f"正在抓取名称: {name}-{code}-{title}")
-        # 解析基本信息
-        detail_data = self._parse_basic_info(response)
+        try:
+            # 解析基本信息
+            detail_data = self._parse_basic_info(response)
 
-        script_text = "".join(response.css("script::text").getall())
-        gid_match = re.search(r"var\s+gid\s*=\s*(\d+);", script_text)
-        uc_match = re.search(r"var\s+uc\s*=\s*(\d+);", script_text)
-        img_match = re.search(r"var\s+img\s*=\s*['\"](.+?)['\"];", script_text)
+            script_text = "".join(response.css("script::text").getall())
+            gid_match = re.search(r"var\s+gid\s*=\s*(\d+);", script_text)
+            uc_match = re.search(r"var\s+uc\s*=\s*(\d+);", script_text)
+            img_match = re.search(r"var\s+img\s*=\s*['\"](.+?)['\"];", script_text)
 
-        if not gid_match or not uc_match or not img_match:
-            self.logger.warning(f"⚠️ 无法解析 gid/uc/img: {response.url}")
-            return
+            if not gid_match or not uc_match or not img_match:
+                self.fail_count += 1  # ❌ 无磁力链接
+                self.logger.warning(f"⚠️ 无法解析 gid/uc/img: {response.url}")
+                return
 
-        gid = gid_match.group(1)
-        uc = uc_match.group(1)
-        img = img_match.group(1)
+            gid = gid_match.group(1)
+            uc = uc_match.group(1)
+            img = img_match.group(1)
 
-        ajax_url = f"https://www.javbus.com/ajax/uncledatoolsbyajax.php?gid={gid}&lang=zh&img={img}&uc={uc}&floor=735"
+            ajax_url = f"https://www.javbus.com/ajax/uncledatoolsbyajax.php?gid={gid}&lang=zh&img={img}&uc={uc}&floor=735"
 
-        yield scrapy.Request(
-            url=ajax_url,
-            callback=self.parse_magnet_ajax,
-            meta={
-                "title": title,
+            yield scrapy.Request(
+                url=ajax_url,
+                callback=self.parse_magnet_ajax,
+                meta={
+                    "title": title,
+                    "code": code,
+                    "detail_data": detail_data
+                },
+                errback=self.handle_error,
+                priority=10
+            )
+        except Exception as e:
+            self.fail_count += 1
+            self.failed_items.append({
+                "task": self.task.name,
                 "code": code,
-                "detail_data": detail_data
-            },
-            errback=self.handle_error,
-            priority=10
-        )
+                "url": url,
+                "reason": f"解析出错: {e}"
+            })
+            self.logger.error(f"❌ 解析详情页失败: {code} | 错误: {e}")
 
     def _parse_basic_info(self, response) -> Dict[str, Any]:
         """
@@ -343,6 +362,12 @@ class JavbusSpider(scrapy.Spider):
             only_chinese=self.task.filter.get("only_chinese", False)
         )
         if not best_magnet:
+            self.fail_count += 1  # ❌ 无磁力链接
+            self.failed_items.append({
+                "task": self.task.name,
+                "code": code,
+                "reason": "无可用磁力链接"
+            })
             self.logger.info(f"⚠️ {code} | {title} 没有可用磁力链接，跳过")
             return
 
@@ -350,7 +375,9 @@ class JavbusSpider(scrapy.Spider):
         item = self._build_final_item(
             title, code, best_magnet, max_size, has_chinese_sub, detail_data
         )
-
+        self.success_count += 1  # ✅ 成功影片 +1
+        if has_chinese_sub:
+            self.chinese_count += 1  # 🇨🇳 含中文字幕 +1
         self.logger.info(f"✅ 完整详情: {code} | {title} |  大小: {max_size}MB")
 
         yield item
@@ -386,7 +413,7 @@ class JavbusSpider(scrapy.Spider):
 
             weight = _calculate_magnet_weight_javbus(magnet_data)
 
-            if weight > max_weight:
+            if weight >= max_weight:
                 best_magnet = magnet_data["url"]
                 max_weight = weight
                 has_chinese_sub = magnet_data["has_chinese_sub"]
@@ -457,3 +484,21 @@ class JavbusSpider(scrapy.Spider):
     @logger.setter
     def logger(self, value):
         self._logger = value
+
+    def close(self, reason):
+        """爬虫结束时输出统计结果"""
+        self.logger.info("📊 爬取统计结果 --------------------------------")
+        self.logger.info(f"🧩 任务名称: {self.task.name}")
+        self.logger.info(f"🎬 总计尝试影片数: {self.total_count}")
+        self.logger.info(f"✅ 成功获取磁力数: {self.success_count}")
+        self.logger.info(f"🇨🇳 含中文字幕磁力数: {self.chinese_count}")
+        self.logger.info(f"❌ 失败（无磁力/出错）数: {self.fail_count}")
+        self.logger.info(f"📦 爬虫结束原因: {reason}")
+        self.logger.info("--------------------------------------------")
+
+        if self.failed_items:
+            self.logger.warning("❗ 以下影片未成功爬取:")
+            for fail in self.failed_items:
+                self.logger.warning(
+                    f"  [任务: {fail['task']}] {fail['code']} | {fail['reason']} | URL: {fail['url']}"
+                )
