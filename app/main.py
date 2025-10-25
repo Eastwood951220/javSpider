@@ -191,6 +191,7 @@ class TaskRunner:
                 self.logger.error("❌ 无有效任务可执行")
                 return
 
+            valid_tasks = list(reversed(valid_tasks))
             self._display_tasks_summary(valid_tasks)
             self.run_spiders(valid_tasks)
             reactor.run()

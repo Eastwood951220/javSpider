@@ -62,8 +62,16 @@ def _should_skip_item(filters, detail_data: Dict) -> bool:
 
     return False
 
+def _calculate_magnet_weight_javdb(magnet_data: Dict) -> float:
+    """计算磁力链接的权重"""
+    base_weight = magnet_data["size"]
 
-def _calculate_magnet_weight(magnet_data: Dict) -> float:
+    # 中文优先加权
+    priority_boost = 10000 if any("字幕" in t for t in magnet_data["tags"]) else 0
+
+    return base_weight + priority_boost
+
+def _calculate_magnet_weight_javbus(magnet_data: Dict) -> float:
     base_weight = magnet_data.get("size", 0)
 
     tags = magnet_data.get("tags", [])
@@ -77,7 +85,16 @@ def _calculate_magnet_weight(magnet_data: Dict) -> float:
     return base_weight + priority_boost
 
 
-def _prefilter_magnets(magnets, only_chinese: bool) -> List:
+def _prefilter_magnets_javdb(magnets, only_chinese: bool) -> List:
+    """预过滤磁力链接"""
+    if not only_chinese:
+        return magnets
+
+    chinese_magnets = [m for m in magnets if m.css(".tags .is-warning")]
+    return chinese_magnets if chinese_magnets else magnets
+
+
+def _prefilter_magnets_javbus(magnets, only_chinese: bool) -> List:
     """预过滤磁力链接"""
     if not only_chinese:
         return magnets
@@ -85,17 +102,9 @@ def _prefilter_magnets(magnets, only_chinese: bool) -> List:
     chinese_magnets = []
 
     for m in magnets:
-        # --- 情况A：Scrapy Selector 对象 ---
-        if hasattr(m, "css"):
-            tag_texts = m.css(".tags .is-warning::text").getall()
-            if any("中字" in t or "字幕" in t for t in tag_texts):
-                chinese_magnets.append(m)
-
-        # --- 情况B：已解析的 dict 数据 ---
-        elif isinstance(m, dict):
-            tags = m.get("tags", [])
-            if any("中字" in t or "字幕" in t for t in tags):
-                chinese_magnets.append(m)
+        tags = m.get("tags", [])
+        if any("中字" in t or "字幕" in t for t in tags):
+            chinese_magnets.append(m)
 
     return chinese_magnets if chinese_magnets else magnets
 

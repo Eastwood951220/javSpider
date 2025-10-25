@@ -1,54 +1,297 @@
 tasks:
-#  - name: "三喜本のぞみ"
-#    url: "https://javdb.com/actors/1k3v"
-#    url_type: "actor"
-#    is_skip: true
-#    filter:
-#      only_chinese: false
-#      exclude_multi_person: false
-#
-#  - name: "藤沢麗央"
-#    url: "https://javdb.com/actors/O2X20"
-#    url_type: "actor"
-#    is_skip: true
-#    filter:
-#      only_chinese: false
-#      exclude_multi_person: false
-#
-#  - name: "丸石レア"
-#    url: "https://javdb.com/actors/VwkWq"
-#    url_type: "actor"
-#    is_skip: true
-#    filter:
-#      only_chinese: false
-#      exclude_multi_person: false
-#
-#  - name: "田野憂"
-#    url: "https://javdb.com/actors/8VOMx"
-#    url_type: "actor"
-#    is_skip: true
-#    filter:
-#      only_chinese: false
-#      exclude_multi_person: false
-#
-#  - name: "RCTD"
-#    url: "https://javdb.com/video_codes/RCTD"
-#    url_type: "code"
-#    is_skip: true
-#    filter:
-#      only_chinese: false
-#
-#  - name: "武田怜香"
-#    url: "https://javdb.com/actors/qD43N"
-#    url_type: "actor"
-#    is_skip: true
-#    filter:
-#      only_chinese: false
-#      exclude_multi_person: false
+  - name: "三喜本のぞみ"
+    url: "https://javdb.com/actors/1k3v"
+    url_type: "actor"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+
+  - name: "藤沢麗央"
+    url: "https://javdb.com/actors/O2X20"
+    url_type: "actor"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+
+  - name: "丸石レア"
+    url: "https://javdb.com/actors/VwkWq"
+    url_type: "actor"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+
+  - name: "田野憂"
+    url: "https://javdb.com/actors/8VOMx"
+    url_type: "actor"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+
+  - name: "RCTD"
+    url: "https://javdb.com/video_codes/RCTD"
+    url_type: "code"
+    is_skip: true
+    filter:
+      only_chinese: false
+
+  - name: "武田怜香"
+    url: "https://javdb.com/actors/qD43N"
+    url_type: "actor"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+
+  - name: "吉根柚莉愛"
+    url: "https://javdb.com/actors/0Bw3"
+    url_type: "actor"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+
+  - name: "本真友裡"
+    url: "https://javdb.com/actors/E4bx"
+    url_type: "actor"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+
+  - name: "小早川怜子"
+    url: "https://javdb.com/actors/z964"
+    url_type: "actor"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+
+  - name: "吹石玲奈"
+    url: "https://javdb.com/actors/m0DY"
+    url_type: "actor"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+
+  - name: "AIKA"
+    url: "https://javdb.com/actors/RXbR"
+    url_type: "actor"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+
+  - name: "君島美緒"
+    url: "https://javdb.com/actors/96AR"
+    url_type: "actor"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+
+  - name: "漫改"
+    url: "https://javdb.com/video_codes/URE"
+    url_type: "code"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+
+  - name: "漫改"
+    url: "https://javdb.com/video_codes/NIMA"
+    url_type: "code"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+
+  - name: "漫改"
+    url: "https://javdb.com/video_codes/MIMK"
+    url_type: "code"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+
+  - name: "漫改"
+    url: "https://javdb.com/video_codes/MUDR"
+    url_type: "code"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
 
   - name: "Madonna"
     url: "https://www.javbus.com/label/7l"
     url_type: "company"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+
+  - name: "波多野結衣"
+    url: "https://www.javbus.com/star/2jv"
+    url_type: "actor"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+
+  - name: "JULIA"
+    url: "https://javdb.com/actors/1KBW"
+    url_type: "actor"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+
+  - name: "松下紗栄子"
+    url: "https://javdb.com/actors/6qA7"
+    url_type: "actor"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+
+  - name: "永井瑪麗亞"
+    url: "https://javdb.com/actors/Bxw4"
+    url_type: "actor"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+
+  - name: "有栖花緋"
+    url: "https://javdb.com/actors/1G09"
+    url_type: "actor"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+
+  - name: "風間由美"
+    url: "https://javdb.com/actors/82m3"
+    url_type: "actor"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+
+  - name: "佐山愛"
+    url: "https://javdb.com/actors/PO5v"
+    url_type: "actor"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+
+  - name: "橘瑪麗"
+    url: "https://javdb.com/actors/yzZW"
+    url_type: "actor"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+
+  - name: "楪可憐"
+    url: "https://javdb.com/actors/p3kMZ"
+    url_type: "actor"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+
+  - name: "田中檸檬"
+    url: "https://javdb.com/actors/kzx6"
+    url_type: "actor"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+
+  - name: "沖宮那美"
+    url: "https://javdb.com/actors/vDQ0n"
+    url_type: "actor"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+
+  - name: "水野朝陽"
+    url: "https://javdb.com/actors/35re"
+    url_type: "actor"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+
+  - name: "沖田杏梨"
+    url: "https://javdb.com/actors/pDeZ"
+    url_type: "actor"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+
+  - name: "蓮實克蕾兒"
+    url: "https://javdb.com/actors/B0nG"
+    url_type: "actor"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+
+  - name: "織田真子"
+    url: "https://javdb.com/actors/Oq2y"
+    url_type: "actor"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+
+  - name: "母女"
+    url: "https://javdb.com/lists/4NvGG"
+    url_type: "list"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+  - name: "母女"
+    url: "https://javdb.com/lists/XWJz5"
+    url_type: "list"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+  - name: "母女"
+    url: "https://javdb.com/lists/89PkO"
+    url_type: "list"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+  - name: "母女"
+    url: "https://javdb.com/lists/B19Jd"
+    url_type: "list"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+  - name: "母女"
+    url: "https://javdb.com/lists/vdJ3G"
+    url_type: "list"
+    is_skip: true
+    filter:
+      only_chinese: false
+      exclude_multi_person: false
+  - name: "母女"
+    url: "https://javdb.com/lists/pPD55"
+    url_type: "list"
     is_skip: true
     filter:
       only_chinese: false

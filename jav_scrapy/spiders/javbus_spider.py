@@ -10,9 +10,9 @@ from task.manager import Task
 from .utils import (_parse_actors,
                     _safe_extract_first,
                     _safe_join_texts,
-                    _calculate_magnet_weight,
+                    _calculate_magnet_weight_javbus,
                     _parse_size,
-                    _prefilter_magnets)
+                    _prefilter_magnets_javbus)
 
 
 class JavbusSpider(scrapy.Spider):
@@ -24,9 +24,9 @@ class JavbusSpider(scrapy.Spider):
     allowed_domains = ["javbus.com"]
 
     custom_settings = {
-        "CONCURRENT_REQUESTS": 10,
-        "CONCURRENT_REQUESTS_PER_DOMAIN": 5,
-        "DOWNLOAD_DELAY": 0.5,
+        "CONCURRENT_REQUESTS": 1,
+        "CONCURRENT_REQUESTS_PER_DOMAIN": 1,
+        "DOWNLOAD_DELAY": 2,
         "RANDOMIZE_DOWNLOAD_DELAY": False,
         "AUTOTHROTTLE_ENABLED": False,
     }
@@ -62,7 +62,7 @@ class JavbusSpider(scrapy.Spider):
 
         # 状态变量
         self.duplicate_count = 0
-        self.max_duplicates = 5
+        self.max_duplicates = 3
         self.stop_current_actor = False
 
     def _init_components(self):
@@ -138,14 +138,14 @@ class JavbusSpider(scrapy.Spider):
             yield from self.process_list_item(item, response)
 
         # 处理下一页
-        next_url = response.css("a#next::attr(href)").get()
-        if next_url and not self.stop_current_actor:
-            yield response.follow(
-                next_url,
-                callback=self.parse_list,
-                errback=self.handle_error,
-                priority=-10
-            )
+        # next_url = response.css("a#next::attr(href)").get()
+        # if next_url and not self.stop_current_actor:
+        #     yield response.follow(
+        #         next_url,
+        #         callback=self.parse_list,
+        #         errback=self.handle_error,
+        #         priority=-10
+        #     )
 
     def process_list_item(self, item, response):
         title = item.css("img::attr(title)").get() or ""
@@ -373,7 +373,7 @@ class JavbusSpider(scrapy.Spider):
             return "", 0.0, False
 
         # 预过滤
-        filtered_magnets = _prefilter_magnets(magnets, only_chinese)
+        filtered_magnets = _prefilter_magnets_javbus(magnets, only_chinese)
         best_magnet = ""
         max_weight = 0
         has_chinese_sub = False
@@ -384,7 +384,7 @@ class JavbusSpider(scrapy.Spider):
             if not magnet_data:
                 continue
 
-            weight = _calculate_magnet_weight(magnet_data)
+            weight = _calculate_magnet_weight_javbus(magnet_data)
 
             if weight > max_weight:
                 best_magnet = magnet_data["url"]
